@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,11 +15,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/home','HomeController@index')->name('home');
+Route::get('/', function () {
+    return view('index');
+})->middleware(['auth'])->name('index');
+Route::group(['middleware' => ['auth']], function() {
+    Route::get('/logout', 'App\Http\Controllers\LogoutController@perform')->name('logout.perform');
+ });
 
 require __DIR__.'/auth.php';
