@@ -17,11 +17,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('index');
 });
-Route::get('/home','HomeController@index')->name('home');
+Route::get('/dashboard','App\Http\Controllers\HomeController@index')->name('dashboard');
 Route::get('/', function () {
     return view('index');
 })->middleware(['auth'])->name('index');
 Route::group(['middleware' => ['auth']], function() {
+    /**
+    * Logout Route
+    */
     Route::get('/logout', 'App\Http\Controllers\LogoutController@perform')->name('logout.perform');
  });
 
