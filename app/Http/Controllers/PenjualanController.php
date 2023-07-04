@@ -82,4 +82,7 @@ class PenjualanController extends Controller
     {
         //
     }
+    public function formjual(){
+        return view('/formjual');
+    }
 }

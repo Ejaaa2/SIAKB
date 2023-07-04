@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
              'alamat'=>'jl Rungkut',
              'jabatan'=>'admin',
              'nohp' => '085730205815',
-             'foto'=>'storage/public/adm.jpg']
+             'foto'=>'photo3.png']
             ));
     }
 }

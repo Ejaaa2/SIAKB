@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang;
 use App\Models\Pengiriman;
+use App\Models\Peternak;
+use App\Models\Stok_peternak;
 use Illuminate\Http\Request;
 
 class PengirimanController extends Controller
@@ -81,5 +84,37 @@ class PengirimanController extends Controller
     public function destroy(Pengiriman $pengiriman)
     {
         //
+    }
+    public function buatpengiriman(Request $request){
+        $nextKirim=date('Y-m-d',strtotime(('+7 days')));
+        $today=date('Y-m-d');
+        $idp=$request->idpeternak;
+
+        $rnstok=Stok_peternak::select('stok_peternaks.stok')->where('stok_peternaks.peternak_id','=',$idp);
+        $stokm=$request->stokp;
+
+        $pengiriman = new Pengiriman();
+        $pengiriman->peternak_id=$idp;
+        $pengiriman->jumlah=$stokm;
+        $pengiriman->barang_id=$request->idbarang;
+        $pengiriman->tanggal=$today;
+        $pengiriman->save();
+
+        $peternak = Peternak::find($idp);
+        $peternak->pengirimanselanjutnya=$nextKirim;
+        $peternak->save();
+
+        $stok=Stok_peternak::find($idp)->join('barangs','barang_id','=','barangs.idbarang')->where('tipe','=','Pakan');
+        $stok->stok=$rnstok+$stokm;
+        $stok->save();
+
+    }
+    public function showkirim(){
+        $twoDbefore=date('Y-m-d', strtotime('-2 days'));
+        $dataPakan = Stok_peternak::join('peternaks', 'peternak_id', '=', 'peternaks.id')->join('barangs','barang_id','=','barangs.idbarang')
+        ->select('peternaks.*','barangs.*','stok_peternaks.*')
+        ->where('barangs.tipe','=','pakan')->where('pengirimanselanjutnya','<=',$twoDbefore)
+        ->get();
+        return view ('/formpengiriman',compact('dataPakan'));
     }
 }

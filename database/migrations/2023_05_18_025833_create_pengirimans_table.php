@@ -39,6 +39,6 @@ class CreatePengirimansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pengirimen');
+        Schema::dropIfExists('pengirimans');
     }
 }

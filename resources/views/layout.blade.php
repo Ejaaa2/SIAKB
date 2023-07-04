@@ -31,9 +31,9 @@
 
   <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+    <img class="animation__shake" src="{{asset('img/AKA.png')}}" alt="AdminLTELogo" height="200" width="200">
+    <h2>Anugerah Kartika Agro Blitar</h2>
   </div>
-
 
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -43,10 +43,10 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
+        <a href="/dashboard" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <a href="#" class="nav-link" onclick="showPopup()">Contact</a>
       </li>
     </ul>
 
@@ -73,9 +73,14 @@
           </form>
         </div>
       </li>
+      <div>
+            <a href="/logout" class="nav-link">
+              <p>Logout</p>
+            </a>
+      </div>
 
       <!-- Messages Dropdown Menu -->
-      <li class="nav-item dropdown">
+      {{-- <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-comments"></i>
           <span class="badge badge-danger navbar-badge">3</span>
@@ -131,8 +136,8 @@
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
         </div>
-      </li>
-      <!-- Notifications Dropdown Menu -->
+      </li> --}}
+      {{-- <!-- Notifications Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell"></i>
@@ -168,7 +173,7 @@
         <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
           <i class="fas fa-th-large"></i>
         </a>
-      </li>
+      </li> --}}
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -178,7 +183,7 @@
     <!-- Brand Logo -->
     <a href="index.html" class="brand-link">
       <img src="img/AKA.png" alt="PT. Anugerah Kartika Agro Blitar" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">Anugrah Kartika Agro</span>
+      <span class="brand-text font-weight-light">Anugerah Kartika Agro</span>
     </a>
 
     <!-- Sidebar -->
@@ -186,10 +191,10 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="{{asset('storage/karyawan/'.Auth::user()->foto)}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">{{ Auth::user()->name }}</a>
         </div>
       </div>
 
@@ -206,13 +211,15 @@
       </div>
 
       <!-- Sidebar Menu -->
+
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item menu-open">
+        @if(Auth::user()->jabatan == 'pengawas'||Auth::user()->jabatan == 'admin')
+          <li class="nav-item menu">
             <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <i class="nav-icon fa fa-briefcase"></i>
               <p>
                 Dashboard
                 <i class="right fas fa-angle-left"></i>
@@ -220,79 +227,249 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/index" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
+                  <a href="/dashboard" class="nav-link">
                     <p>Home</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                    <a href="pages/layout/top-nav.html" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
+                    <a href="/tampilprofil" class="nav-link">
                       <p>Profile</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/logout" class="nav-link">
+                      <p>Log Out</p>
+                    </a>
+                  </li>
+            </ul>
+          </li>
+          {{-- Inventori --}}
+          <li class="nav-item menu">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fa fa-archive"></i>
+              <p>
+                Inventori
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="/datastok" class="nav-link">
+                    <p>Stok Peternak</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/historiorder" class="nav-link">
+                      <p>Histori Order</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/historikirim" class="nav-link">
+                      <p>Histori Pengiriman</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/pindahstok" class="nav-link">
+                      <p>Perpindahan Stok</p>
                     </a>
                 </li>
             </ul>
           </li>
-          <li class="nav-item">
+          @endif
+          @if(Auth::user()->jabatan == 'admin')
+          <li class="nav-item menu">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-copy"></i>
+                <i class="nav-icon fa fa-male"></i>
+                <p>
+                  Data Karyawan
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="/datakaryawan" class="nav-link">
+                    <p>Data Karyawan</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tambahkaryawan" class="nav-link">
+                      <p>Tambah Karyawan</p>
+                    </a>
+                </li>
+            </ul>
+          </li>
+          {{-- Data Peternak --}}
+          <li class="nav-item menu">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fa fa-users"></i>
               <p>
-                Layout Options
-                <i class="fas fa-angle-left right"></i>
-                <span class="badge badge-info right">6</span>
+                Data Peternak
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="/datapeternak" class="nav-link">
+                    <p>Data Peternak</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/tambahpeternak" class="nav-link">
+                      <p>Tambah Peternak</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/formpengiriman" class="nav-link">
+                      <p>Pengiriman</p>
+                    </a>
+                </li>
+            </ul>
+          <li class="nav-item menu">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fa fa-gear"></i>
+              <p>
+                Request Order
+              <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/layout/top-nav.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Top Navigation</p>
-                </a>
+                  <a href="/getorder" class="nav-link">
+                    <p>Proses Order Masuk</p>
+                  </a>
               </li>
-              <li class="nav-item">
-                <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Top Navigation + Sidebar</p>
+          </ul>
+        </li>
+        <li class="nav-item menu">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fa fa-cart-plus"></i>
+            <p>
+              Penjualan
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="/rekapjual" class="nav-link">
+                  <p>Rekap Data Penjualan</p>
                 </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/layout/boxed.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Boxed</p>
+            </li>
+        </ul>
+        </li>
+        @endif
+        @if(Auth::user()->jabatan == 'pengawas')
+        <li class="nav-item menu">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fa fa-users"></i>
+            <p>
+              Data Peternak
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="/datapeternak" class="nav-link">
+                  <p>Data Peternak</p>
                 </a>
-              </li>
+            </li>
+            <li class="nav-item">
+              <a href="/pindahstok" class="nav-link">
+                <p>Pindah Stok</p>
+              </a>
+            </li>
+          </ul>
+          <ul class="nav nav-treeview">
+          <li class="nav-item">
+              <a href="/datapeternak" class="nav-link">
+                <p>Order Barang</p>
+              </a>
+          </li>
+          <li class="nav-item">
+            <a href="/orderkebutuhan" class="nav-link">
+              <p>Order Kebutuhan Ternak</p>
+            </a>
+          </li>
+          </ul>
+          <ul class="nav nav-treeview">
+          <li class="nav-item">
+              <a href="" class="nav-link">
+                <p>Penimbangan</p>
+              </a>
+          </li>
+          <li class="nav-item">
+            <a href="" class="nav-link">
+              <p>Input Data Penimbangan</p>
+            </a>
+          </li>
+          {{-- <fa fa-balance-scale> --}}
+          <li class="nav-item">
+            <a href="/inputtimbang" class="nav-link">
+              <p>Rekap Data Penimbangan</p>
+            </a>
+          </li>
+          </ul>
+        </li>
+        @endif
+        @if (Auth::user()->jabatan == 'marketing')
+          <li class="nav-item menu">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa fa-users"></i>
+              <p>
+                Data Peternak
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/layout/fixed-sidebar.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Fixed Sidebar</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/layout/fixed-sidebar-custom.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Fixed Sidebar <small>+ Custom Area</small></p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/layout/fixed-topnav.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Fixed Navbar</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/layout/fixed-footer.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Fixed Footer</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="/logout" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Log Out</p>
+                <a href="/datapeternak" class="nav-link">
+                  <p>Data Peternak</p>
                 </a>
               </li>
             </ul>
           </li>
+          <li class="nav-item menu">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fa fa-bullseye"></i>
+              <p>
+                Data Pembeli
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/datapembeli" class="nav-link">
+                  <p>Data Pembeli</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/tambahpembeli" class="nav-link">
+                  <p>Tambah Pembeli</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item menu">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fa fa-gear"></i>
+              <p>
+                Data Penjualan
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/showformjual" class="nav-link">
+                  <p>Input Data Penjualan</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/rekapjual" class="nav-link">
+                  <p>Rekap Data Penjualan</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+        @endif
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -311,7 +488,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="index.blade">Home</a></li>
+              <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
               <li class="breadcrumb-item active">Dashboard v1</li>
             </ol>
           </div><!-- /.col -->
@@ -323,7 +500,9 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-
+        @yield('konten')
+      </div>
+    </section>
   {{-- <!-- /.content-wrapper -->
   <footer class="main-footer">
     <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
@@ -375,5 +554,14 @@
 <script src="{{asset('AdminLTE-3.2.0/dist/js/demo.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{asset('AdminLTE-3.2.0/dist/js/pages/dashboard.js')}}"></script>
+@section('script')
+<script type="text/javascript">
+//script
+function showPopup() {
+    alert('Jl. Kopda Romeli, Gedog, Kec. Sananwetan, Kota Blitar, (0342) 8173292');
+}
+</script>
+@endsection
+@yield('script')
 </body>
 </html>
